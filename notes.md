@@ -66,3 +66,33 @@ We need the editor to handle the component lifecycle automatically:
 ### Why is this important?
 
 Performance! It ensures your entire app doesn't re-render on every single keystroke, only the parts of the UI (like a bold button highlighting) that need to update.
+
+---
+
+# BubbleMenu is already built into Tiptap.
+
+- You just import it, pass your editor instance, and Tiptap automatically shows the bubble near your selected text.
+- I only design the UI inside it — Tiptap handles all positioning and state logic for me.
+- BubbleMenu is for formatting existing text — it shows when you select something.
+
+# FloatingMenu (cursor/empty-line based)
+
+Appears when the cursor is in a certain position, usually:
+On an empty paragraph
+Or wherever you configure with shouldShow
+Great for block-level actions
+Add heading, list, quote, image, component, etc.
+Feels like Notion's “+” or slash menu
+
+# Attached to the line/block, not the selection
+
+Use FloatingMenu when:
+
+- You want tools to appear when the user is about to insert something new
+- You are doing block-level operations:
+- Change paragraph → heading
+- Turn line into list / quote / code block
+- Insert image, divider, custom components
+- You want a Notion-like block insert menu on empty lines
+
+“User is on an empty line → show FloatingMenu with block options.”
