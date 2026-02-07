@@ -1,3 +1,13 @@
+import {
+  LayoutDashboard,
+  Search,
+  Briefcase,
+  Bookmark,
+  Settings,
+  Plus,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
 export const SESSION_LIFETIME = 30 * 24 * 60 * 60;
 export const SESSION_REFRESH_TIME = SESSION_LIFETIME / 2;
 
@@ -44,46 +54,83 @@ export const MIN_EDUCATION = [
   "phd",
 ] as const;
 
-import {
-  LayoutDashboard,
-  Search,
-  Briefcase,
-  Bookmark,
-  Settings,
-} from "lucide-react"; // Icons example
+// =====================================================
+// NAVIGATION TYPES
+// =====================================================
+export interface NavItem {
+  name: string;
+  href: string;
+  icon: LucideIcon;
+  exact?: boolean;
+  badge?: number | "dynamic";
+}
 
-// Employer Sidebar Menu
-export const employerSidebarLinks = [
-  { label: "Dashboard", href: "/employer/dashboard", icon: LayoutDashboard },
-  { label: "Find Talents", href: "/employer/talents", icon: Search },
-  // ... other employer links
-];
-
-// Applicant Sidebar Menu (Jo aapne upar list di hai)
-export const applicantSidebarLinks = [
+// =====================================================
+// APPLICANT DASHBOARD NAVIGATION
+// =====================================================
+/**
+ * Applicant Dashboard Navigation Items
+ * Based on folder structure: app/(applicants)/dashboard/
+ */
+export const applicantNavItems: NavItem[] = [
   {
-    label: "Dashboard",
-    href: "/applicant/dashboard",
+    name: "Home",
+    href: "/dashboard",
     icon: LayoutDashboard,
+    exact: true, // Exact match only for home
   },
   {
-    label: "Find Jobs",
-    href: "/applicant/find-jobs",
+    name: "Find Jobs",
+    href: "/dashboard/jobs",
     icon: Search,
   },
   {
-    label: "My Applications",
-    href: "/applicant/applications",
+    name: "Applied",
+    href: "/dashboard/applications",
     icon: Briefcase,
+    badge: "dynamic", // Will show count of applied jobs
   },
   {
-    label: "Saved Jobs",
-    href: "/applicant/saved-jobs",
+    name: "Saved Jobs",
+    href: "/dashboard/saved-jobs",
     icon: Bookmark,
+    badge: "dynamic", // Will show count of saved jobs
   },
   {
-    label: "Profile / Settings",
-    href: "/applicant/settings",
+    name: "Settings",
+    href: "/dashboard/settings",
+    icon: Settings,
+  },
+];
+
+// =====================================================
+// EMPLOYER DASHBOARD NAVIGATION
+// =====================================================
+/**
+ * Employer Dashboard Navigation Items
+ * Based on folder structure: app/employer-dashboard/
+ */
+export const employerNavItems: NavItem[] = [
+  {
+    name: "Dashboard",
+    href: "/employer-dashboard",
+    icon: LayoutDashboard,
+    exact: true, // Exact match for dashboard home
+  },
+  {
+    name: "Create Job",
+    href: "/employer-dashboard/jobs/create",
+    icon: Plus,
+  },
+  {
+    name: "My Jobs",
+    href: "/employer-dashboard/jobs",
+    icon: Briefcase,
+    // Note: /jobs exact match chahiye but /jobs/[jobId]/edit allow karna hai
+  },
+  {
+    name: "Settings",
+    href: "/employer-dashboard/settings",
     icon: Settings,
   },
 ];

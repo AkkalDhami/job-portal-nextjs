@@ -1,56 +1,16 @@
 "use client";
 
 import { logoutUserAction } from "@/features/auth/server/auth.actions";
+import { isActiveLink } from "@/lib/navigation-utils";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  Search,
-  Briefcase,
-  Bookmark,
-  Settings,
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-// Base URL set karein
-const base = "/dashboard";
-
-// Applicant specific navigation items
-const navigationItems = [
-  { name: "Home", icon: LayoutDashboard, href: base + "/" },
-  { name: "Find Jobs", icon: Search, href: base + "/find-jobs" },
-  { name: "Applied", icon: Briefcase, href: base + "/applications" },
-  { name: "Saved Jobs", icon: Bookmark, href: base + "/saved-jobs" },
-  { name: "Settings", icon: Settings, href: base + "/settings" },
-];
+import { applicantNavItems } from "@/config/constant";
 
 const ApplicantSidebar = () => {
   const pathname = usePathname();
-
-  // Same logic as EmployerSidebar for consistency
-  function isLinkActive({
-    href,
-    pathname,
-    base = "/",
-  }: {
-    href: string;
-    pathname: string;
-    base?: string;
-  }) {
-    // Safety check: URLPattern might not exist in all environments (SSR),
-    // but since you are using it in EmployerSidebar, we keep it here.
-    try {
-      const normalizedHref = href.replace(/\/$/, "") || "/";
-      const pattern = new URLPattern({
-        pathname: normalizedHref === base ? base : `${normalizedHref}{/*}?`,
-      });
-      return pattern.test({ pathname });
-    } catch (error) {
-      // Fallback agar URLPattern fail ho (optional safety)
-      return pathname.startsWith(href);
-    }
-  }
+  console.log("pathname: ", pathname);
 
   return (
     <div className="w-64 bg-card border-r border-border fixed bottom-0 top-0">
@@ -61,26 +21,25 @@ const ApplicantSidebar = () => {
       </div>
 
       <nav className="px-3 space-y-1">
-        {navigationItems.map((curNav) => {
-          const Icon = curNav.icon;
+        {applicantNavItems.map((item) => {
+          const Icon = item.icon;
+          const active = isActiveLink(pathname, item.href, item.exact);
+
+          console.log("pathname:   item.href ", item.href);
 
           return (
             <Link
-              key={curNav.name}
-              href={curNav.href || "#"}
+              key={item.name}
+              href={item.href || "#"}
               className={cn(
                 "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors",
-                isLinkActive({
-                  href: curNav.href || "#",
-                  pathname,
-                  base: "/dashboard",
-                })
-                  ? "text-primary bg-blue-300/20" // Note: bg-blue-300 might be too dark, added opacity or stick to your class
+                active
+                  ? "text-primary bg-primary/10" // Note: bg-blue-300 might be too dark, added opacity or stick to your class
                   : "text-muted-foreground hover:text-foreground hover:bg-accent",
               )}
             >
               <Icon className="h-4 w-4" />
-              {curNav.name}
+              {item.name}
             </Link>
           );
         })}

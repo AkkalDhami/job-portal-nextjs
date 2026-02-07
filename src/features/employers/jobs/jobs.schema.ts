@@ -152,7 +152,7 @@ export const jobSchema = z
         },
         {
           message: "Expiry date must be today or in the future",
-        }
+        },
       )
       .nullable(),
   })
@@ -166,7 +166,7 @@ export const jobSchema = z
     {
       message: "Maximum salary must be greater than or equal to minimum salary",
       path: ["maxSalary"], // path is an array because Zod supports deep/nested paths
-    }
+    },
   )
   .refine(
     (data) => {
@@ -184,7 +184,7 @@ export const jobSchema = z
     {
       message: "Currency and period are required when salary is specified",
       path: ["salaryCurrency"],
-    }
+    },
   );
 
 export type JobFormData = z.infer<typeof jobSchema>;
