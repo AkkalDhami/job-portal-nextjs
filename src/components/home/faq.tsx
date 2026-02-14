@@ -23,44 +23,44 @@ const items = [
   {
     id: "1",
     icon: CommandIcon,
-    title: "What makes Jobify different from other job portals?",
+    title: "What makes Job Portal different from other job portals?",
     content:
-      "Jobify stands out for its smart matching technology that connects the right candidates with the right employers. With a clean, intuitive interface and real-time updates, Jobify makes job searching and hiring faster, easier, and more personalized.",
+      "Job Portal stands out for its smart matching technology that connects the right candidates with the right employers. With a clean, intuitive interface and real-time updates, Job Portal makes job searching and hiring faster, easier, and more personalized.",
   },
   {
     id: "2",
     icon: EclipseIcon,
-    title: "How can I customize my Jobify profile?",
+    title: "How can I customize my Job Portal profile?",
     content:
-      "You can personalize your Jobify profile by adding your resume, skills, experience, and a professional summary. Employers can also customize their company pages with logos, descriptions, and job categories to attract the right talent.",
+      "You can personalize your Job Portal profile by adding your resume, skills, experience, and a professional summary. Employers can also customize their company pages with logos, descriptions, and job categories to attract the right talent.",
   },
   {
     id: "3",
     icon: ZapIcon,
-    title: "Is Jobify optimized for mobile and performance?",
+    title: "Is Job Portal optimized for mobile and performance?",
     content:
-      "Absolutely! Jobify is fully responsive and optimized for performance across all devices. Whether you're browsing on desktop or mobile, you’ll experience smooth navigation, quick load times, and instant job alerts.",
+      "Absolutely! Job Portal is fully responsive and optimized for performance across all devices. Whether you're browsing on desktop or mobile, you’ll experience smooth navigation, quick load times, and instant job alerts.",
   },
   {
     id: "4",
     icon: AtSignIcon,
-    title: "Is my personal information safe on Jobify?",
+    title: "Is my personal information safe on Job Portal?",
     content:
-      "Yes, your data privacy is our top priority. Jobify uses advanced encryption and secure authentication to protect your information. You’re always in control of what you share with employers.",
+      "Yes, your data privacy is our top priority. Job Portal uses advanced encryption and secure authentication to protect your information. You’re always in control of what you share with employers.",
   },
   {
     id: "5",
     icon: UserPlusIcon,
-    title: "How do I create a Jobify account?",
+    title: "How do I create a Job Portal account?",
     content:
-      "Creating a Jobify account is simple. Click the 'Sign Up' button, choose whether you're a Job Seeker or Employer, fill out your basic details, and verify your email. Once registered, you can start applying for jobs or posting openings right away.",
+      "Creating a Job Portal account is simple. Click the 'Sign Up' button, choose whether you're a Job Seeker or Employer, fill out your basic details, and verify your email. Once registered, you can start applying for jobs or posting openings right away.",
   },
   {
     id: "6",
     icon: BellIcon,
-    title: "How do job alerts work on Jobify?",
+    title: "How do job alerts work on Job Portal?",
     content:
-      "You can set up custom job alerts by selecting your preferred job title, industry, and location. Jobify will automatically notify you via email or dashboard when new opportunities that match your preferences are posted.",
+      "You can set up custom job alerts by selecting your preferred job title, industry, and location. Job Portal will automatically notify you via email or dashboard when new opportunities that match your preferences are posted.",
   },
   {
     id: "7",
@@ -72,9 +72,9 @@ const items = [
   {
     id: "8",
     icon: HelpCircleIcon,
-    title: "How can I contact Jobify support?",
+    title: "How can I contact Job Portal support?",
     content:
-      "Our support team is here to help! You can reach us through the 'Contact Us' page or via email at support@jobify.com. We respond to most inquiries within 24 hours.",
+      "Our support team is here to help! You can reach us through the 'Contact Us' page or via email at support@Job Portal.com. We respond to most inquiries within 24 hours.",
   },
 ];
 
@@ -84,8 +84,8 @@ export default function FaqSection() {
       <div className="flex flex-col items-center justify-center space-y-4 text-center mb-8">
         <Heading>Frequently Asked Questions</Heading>
         <SubHeading>
-          Find answers to common questions about using Jobify for job seekers
-          and employers.
+          Find answers to common questions about using Job Portal for job
+          seekers and employers.
         </SubHeading>
       </div>
       <Accordion type="single" collapsible className="w-full" defaultValue="1">
