@@ -542,8 +542,8 @@ export const ImageUpload = ({
     >
       <input {...getInputProps()} />
       <div className="flex flex-col items-center">
-        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
-          <Upload className="w-6 h-6 text-muted-foreground" />
+        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mb-3">
+          <Upload className="w-5 h-5 text-muted-foreground" />
         </div>
         <p className="text-sm font-medium text-foreground mb-1">
           <span className="text-primary">Browse photo</span> or drop here

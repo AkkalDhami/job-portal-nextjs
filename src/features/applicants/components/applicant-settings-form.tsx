@@ -40,6 +40,8 @@ import {
   ApplicantSettingsSchema,
 } from "../applicant.schema";
 import Tiptap from "@/components/text-editor";
+import { ImageUpload } from "@/features/employers/components/employer-setting-form";
+import { cn } from "@/lib/utils";
 
 const ApplicantSettingsForm = () => {
   const {
@@ -73,12 +75,31 @@ const ApplicantSettingsForm = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6 mb-6">
-              <div className="h-24 w-24 rounded-full bg-gray-50 flex items-center justify-center border-2 border-dashed border-gray-200 hover:border-gray-400 cursor-pointer transition">
+              <div>
                 <div className="text-center space-y-1">
-                  <UploadCloud className="h-6 w-6 mx-auto text-muted-foreground" />
-                  <span className="text-[10px] text-muted-foreground block">
-                    Upload Photo
-                  </span>
+                  <Controller
+                    name="avatarUrl"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <div>
+                        <Label>Upload Logo *</Label>
+                        <ImageUpload
+                          value={field.value}
+                          onChange={field.onChange}
+                          className={cn(
+                            fieldState.error &&
+                              "ring-1 ring-destructive/50 rounded-full",
+                            "h-34 w-34",
+                          )}
+                        />
+                        {fieldState.error && (
+                          <p className="text-sm text-destructive">
+                            {fieldState.error.message}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  />
                 </div>
               </div>
               <div className="text-sm text-muted-foreground">

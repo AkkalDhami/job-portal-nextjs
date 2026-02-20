@@ -38,6 +38,7 @@ export const applicantSettingsSchema = z.object({
     .string()
     .max(500, "Bio must be less than 500 characters")
     .optional(),
+  avatarUrl: z.string().optional(),
 
   resume: z
     .any()
@@ -49,7 +50,8 @@ export const applicantSettingsSchema = z.object({
     .refine(
       (files) => ACCEPTED_DOCUMENT_TYPES.includes(files?.[0]?.type),
       "Only .pdf format is supported.",
-    ),
+    )
+    .optional(),
 });
 
 export type ApplicantSettingsSchema = z.infer<typeof applicantSettingsSchema>;
