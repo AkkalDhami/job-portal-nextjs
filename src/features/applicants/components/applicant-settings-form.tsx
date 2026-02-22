@@ -42,12 +42,16 @@ import {
 import Tiptap from "@/components/text-editor";
 import { ImageUpload } from "@/features/employers/components/employer-setting-form";
 import { cn } from "@/lib/utils";
+import { ResumeUpload } from "./resume-upload";
+import { createApplicantProfile } from "../actions/applicant.action";
+import { toast } from "sonner";
 
 const ApplicantSettingsForm = () => {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<ApplicantSettingsSchema>({
     resolver: zodResolver(applicantSettingsSchema),
@@ -58,9 +62,18 @@ const ApplicantSettingsForm = () => {
 
   const onSubmit = async (data: ApplicantSettingsSchema) => {
     console.log("Saving Data:", data);
-    console.log("Resume File:", data.resume?.[0]);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    alert("Profile Updated (Check Console)");
+
+    try {
+      const res = await createApplicantProfile(data);
+      if (res.status === "SUCCESS") {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      console.error("Form Submission Error:", error);
+    }
   };
 
   return (
@@ -404,7 +417,7 @@ const ApplicantSettingsForm = () => {
             <Separator />
 
             {/* --- RESUME UPLOAD --- */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               <Label className="text-base">Resume / CV</Label>
 
               <input
@@ -437,6 +450,40 @@ const ApplicantSettingsForm = () => {
                   {errors.resume.message as string}
                 </p>
               )}
+            </div> */}
+
+            {/* --- RESUME UPLOAD --- */}
+            <div className="space-y-4">
+              <Label className="text-base">Your Cv/Resume</Label>
+
+              <Controller
+                name="resumeUrl"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <ResumeUpload
+                      value={field.value}
+                      onChange={(url, name, size) => {
+                        // We update BOTH fields in React Hook Form when upload finishes
+                        field.onChange(url);
+                        setValue("resumeName", name, {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        });
+                        setValue("resumeSize", size, {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        });
+                      }}
+                    />
+                    {fieldState.error && (
+                      <p className="text-sm text-destructive mt-2">
+                        {fieldState.error.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+              />
             </div>
           </CardContent>
         </Card>

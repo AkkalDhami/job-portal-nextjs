@@ -22,6 +22,13 @@
       "when": 1767851885423,
       "tag": "0002_tiny_quicksilver",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1771565192810,
+      "tag": "0003_hard_polaris",
+      "breakpoints": true
     }
   ]
 }
