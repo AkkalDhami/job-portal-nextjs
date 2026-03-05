@@ -43,10 +43,18 @@ import Tiptap from "@/components/text-editor";
 import { ImageUpload } from "@/features/employers/components/employer-setting-form";
 import { cn } from "@/lib/utils";
 import { ResumeUpload } from "./resume-upload";
-import { createApplicantProfile } from "../actions/applicant.action";
+import {
+  // createApplicantProfile,
+  saveApplicantProfile,
+} from "../actions/applicant.action";
 import { toast } from "sonner";
+import { ApplicantProfileType } from "../server/applicant.queries";
 
-const ApplicantSettingsForm = () => {
+interface ApplicantSettingsFormProps {
+  initialData: ApplicantProfileType | null;
+}
+
+const ApplicantSettingsForm = ({ initialData }: ApplicantSettingsFormProps) => {
   const {
     register,
     handleSubmit,
@@ -55,16 +63,18 @@ const ApplicantSettingsForm = () => {
     formState: { errors, isDirty, isSubmitting },
   } = useForm<ApplicantSettingsSchema>({
     resolver: zodResolver(applicantSettingsSchema),
-    defaultValues: {
-      email: "vinod@thapa.com",
+    defaultValues: initialData || {
+      email: "", // Fallback if no data at all
     },
   });
+
+  const isUpdating = !!initialData?.location; //Boolean coercion
 
   const onSubmit = async (data: ApplicantSettingsSchema) => {
     console.log("Saving Data:", data);
 
     try {
-      const res = await createApplicantProfile(data);
+      const res = await saveApplicantProfile(data);
       if (res.status === "SUCCESS") {
         toast.success(res.message);
       } else {
@@ -488,15 +498,22 @@ const ApplicantSettingsForm = () => {
           </CardContent>
         </Card>
 
-        {/* Footer Actions */}
         <div className="flex items-center gap-4">
           <Button
             type="submit"
-            disabled={isSubmitting}
+            // Disable the button if submitting OR if the user hasn't changed any fields
+            disabled={isSubmitting || !isDirty}
             className="min-w-[150px]"
           >
             {isSubmitting && <Loader className="w-4 h-4 mr-2 animate-spin" />}
-            {isSubmitting ? "Saving..." : "Save Changes"}
+
+            {isSubmitting
+              ? isUpdating
+                ? "Updating..."
+                : "Saving..."
+              : isUpdating
+                ? "Update Profile"
+                : "Save Profile"}
           </Button>
 
           {!isDirty && (

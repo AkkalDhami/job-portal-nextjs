@@ -8,26 +8,54 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import JobOverviewSidebar from "@/features/applicants/jobs/components/jobOverviewSidebar";
 
+import { db } from "@/config/db";
+import { jobApplications, resumes } from "@/drizzle/schema";
+import { eq, and } from "drizzle-orm";
+import { getCurrentUser } from "@/features/auth/server/auth.queries";
+import Link from "next/link";
+import { ApplyJobModal } from "@/features/applicants/jobs/components/apply-job-modal";
+
 interface EditJobPageProps {
   params: { jobId: string };
 }
 
 const JobsDetailedPage = async ({ params }: EditJobPageProps) => {
-  // 1. Validate & Fetch
   const jobId = parseInt(params.jobId);
   if (isNaN(jobId)) return notFound();
 
   const job = await getJobById(jobId);
-  console.log("job: ", job);
-
   if (!job) return notFound();
+
+  // --- FETCH USER, APPLICATION STATUS, AND RESUMES ---
+  const user = await getCurrentUser();
+  let hasApplied = false;
+  let userResumes: { id: number; fileName: string }[] = [];
+
+  if (user) {
+    const existingApplication = await db
+      .select()
+      .from(jobApplications)
+      .where(
+        and(
+          eq(jobApplications.jobId, jobId),
+          eq(jobApplications.applicantId, user.id),
+        ),
+      )
+      .limit(1);
+
+    hasApplied = existingApplication.length > 0;
+
+    // Fetch their resumes for the dropdown
+    userResumes = await db
+      .select({ id: resumes.id, fileName: resumes.fileName })
+      .from(resumes)
+      .where(eq(resumes.applicantId, user.id));
+  }
 
   return (
     <div className="container mx-auto max-w-6xl py-10 px-4 space-y-8">
-      {/* --- HERO HEADER --- */}
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between border-b pb-8">
         <div className="flex gap-5">
-          {/* Logo */}
           <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border bg-gray-50">
             {job.companyLogo ? (
               <Image
@@ -43,7 +71,6 @@ const JobsDetailedPage = async ({ params }: EditJobPageProps) => {
             )}
           </div>
 
-          {/* Title & Meta */}
           <div className="space-y-1">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               {job.title}
@@ -70,17 +97,28 @@ const JobsDetailedPage = async ({ params }: EditJobPageProps) => {
           </div>
         </div>
 
-        {/* Action Button */}
+        {/* -- INTERACTIVE ACTION BUTTON --- */}
         <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <Button size="lg" className="w-full md:w-auto font-semibold">
-            Apply Now
-          </Button>
+          {user ? (
+            <ApplyJobModal
+              jobId={jobId}
+              jobTitle={job.title}
+              hasApplied={hasApplied}
+              resumes={userResumes}
+            />
+          ) : (
+            <Button
+              size="lg"
+              className="w-full md:w-auto font-semibold"
+              asChild
+            >
+              <Link href="/login">Login to Apply</Link>
+            </Button>
+          )}
         </div>
       </div>
 
-      {/* --- MAIN GRID CONTENT --- */}
       <div className="grid gap-8 lg:grid-cols-3">
-        {/* LEFT COLUMN: Description (2/3) */}
         <div className="lg:col-span-2 space-y-8">
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -90,7 +128,6 @@ const JobsDetailedPage = async ({ params }: EditJobPageProps) => {
               className="prose prose-blue max-w-none text-gray-600 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: job.description }}
             />
-            {/* <p> {job.description} </p> */}
           </section>
 
           {/* Tags */}
@@ -109,8 +146,6 @@ const JobsDetailedPage = async ({ params }: EditJobPageProps) => {
             </section>
           )}
         </div>
-
-        {/* RIGHT COLUMN: Sidebar (1/3) */}
 
         <JobOverviewSidebar job={job} />
       </div>

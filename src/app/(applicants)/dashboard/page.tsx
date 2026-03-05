@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/features/auth/server/auth.queries";
 import { ApplicantStats } from "@/features/applicants/components/applicant-stats";
 import { ApplicantProfileStatus } from "@/features/applicants/components/applicant-profile-status";
 import { RecentApplications } from "@/features/applicants/components/recent-applications";
+import { getApplicantProfileData } from "@/features/applicants/server/applicant.queries";
 
 export default async function ApplicantDashboard() {
   const user = await getCurrentUser();

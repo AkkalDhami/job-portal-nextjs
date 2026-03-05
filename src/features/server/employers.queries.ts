@@ -1,7 +1,14 @@
 import { getCurrentUser } from "../auth/server/auth.queries";
-import { employers } from "../../drizzle/schema";
+import {
+  applicants,
+  employers,
+  jobApplications,
+  jobs,
+  resumes,
+  users,
+} from "../../drizzle/schema";
 import { db } from "@/config/db";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export const getCurrentEmployerDetails = async () => {
   const currentUser = await getCurrentUser();
@@ -28,3 +35,29 @@ export const getCurrentEmployerDetails = async () => {
 
   return { ...currentUser, employerDetails: employer, isProfileCompleted };
 };
+
+export async function getEmployerApplications(employerId: number) {
+  const applications = await db
+    .select({
+      application: jobApplications,
+      job: jobs,
+      user: users,
+      applicant: applicants,
+      resume: resumes,
+    })
+    .from(jobApplications)
+    // 1. Join Jobs to know WHICH job they applied for
+    .innerJoin(jobs, eq(jobApplications.jobId, jobs.id))
+    // 2. Join Users to get the applicant's Name, Email, and Avatar
+    .innerJoin(users, eq(jobApplications.applicantId, users.id))
+    // 3. Join Applicants for extra details (location, etc.)
+    .leftJoin(applicants, eq(jobApplications.applicantId, applicants.id))
+    // 4. Join Resumes to get the actual PDF file link
+    .leftJoin(resumes, eq(jobApplications.resumeId, resumes.id))
+    // 5. FILTER: Only show applications for jobs posted by THIS employer
+    .where(eq(jobs.employerId, employerId))
+    // 6. Sort: Newest applications first
+    .orderBy(desc(jobApplications.appliedAt));
+
+  return applications;
+}

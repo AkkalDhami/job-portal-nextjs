@@ -29,6 +29,13 @@
       "when": 1771565192810,
       "tag": "0003_hard_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1772497032181,
+      "tag": "0004_ambitious_kronos",
+      "breakpoints": true
     }
   ]
 }

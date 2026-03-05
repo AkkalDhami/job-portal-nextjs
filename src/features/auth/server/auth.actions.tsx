@@ -31,6 +31,8 @@ import crypto from "crypto";
 // It provides methods like .get(), .set(), .append(), and .entries() — which you’re already using here.
 
 export const registerUserAction = async (data: RegisterUserData) => {
+  console.log("Hii I am register");
+
   try {
     const { data: validatedData, error } = registerUserSchema.safeParse(data);
     if (error) return { status: "ERROR", message: error.issues[0].message };
@@ -53,6 +55,7 @@ export const registerUserAction = async (data: RegisterUserData) => {
     }
 
     const hashPassword = await argon2.hash(password);
+    console.log("hashPassword: ", hashPassword);
 
     await db.transaction(async (tx) => {
       const [result] = await tx
