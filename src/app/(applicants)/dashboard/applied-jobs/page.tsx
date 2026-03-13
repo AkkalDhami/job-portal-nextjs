@@ -11,16 +11,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default async function AppliedJobsPage() {
-  // 1. Auth Check
   const user = await getCurrentUser();
   if (!user) return redirect("/login");
 
-  // 2. Fetch all applications for THIS specific user using SQL-like syntax
   const applications = await getAppliedJobsForApplicant(user.id);
 
   return (
     <div className="max-w-6xl mx-auto py-8 space-y-8">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           Applied Jobs
@@ -49,10 +46,8 @@ export default async function AppliedJobsPage() {
           </Button>
         </div>
       ) : (
-        /* Jobs Grid */
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {applications.map((app) => {
-            // Because we used SQL joins, the data is grouped by table alias!
             const { application, job, employer } = app;
 
             return (
@@ -61,7 +56,6 @@ export default async function AppliedJobsPage() {
                 className="flex flex-col hover:shadow-md transition-shadow"
               >
                 <CardContent className="p-6 flex-grow space-y-4">
-                  {/* Employer Header */}
                   <div className="flex justify-between items-start">
                     <div className="h-12 w-12 relative rounded-md border bg-gray-50 overflow-hidden flex-shrink-0 flex items-center justify-center">
                       {employer?.bannerImageUrl ? (
@@ -85,7 +79,6 @@ export default async function AppliedJobsPage() {
                     </Badge>
                   </div>
 
-                  {/* Job Info */}
                   <div>
                     <h3 className="font-semibold text-lg line-clamp-1 mb-1">
                       {job.title}
@@ -95,7 +88,6 @@ export default async function AppliedJobsPage() {
                     </p>
                   </div>
 
-                  {/* Meta Info */}
                   <div className="space-y-2 text-sm text-gray-500">
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4" />
@@ -107,7 +99,7 @@ export default async function AppliedJobsPage() {
                       <div className="flex items-center gap-2">
                         <Banknote className="w-4 h-4" />
                         <span>
-                          {job.salaryCurrency} {job.minSalary} - {job.maxSalary}{" "}
+                          {job.salaryCurrency} {job.minSalary} - {job.maxSalary}
                           / {job.salaryPeriod?.toLowerCase()}
                         </span>
                       </div>
@@ -115,7 +107,7 @@ export default async function AppliedJobsPage() {
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       <span>
-                        Applied{" "}
+                        Applied
                         {formatDistanceToNow(new Date(application.appliedAt), {
                           addSuffix: true,
                         })}
@@ -124,7 +116,6 @@ export default async function AppliedJobsPage() {
                   </div>
                 </CardContent>
 
-                {/* Footer Action */}
                 <CardFooter className="p-6 pt-0 mt-auto">
                   <Button variant="outline" className="w-full" asChild>
                     <Link href={`/dashboard/jobs/${job.id}`}>

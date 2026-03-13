@@ -1,13 +1,29 @@
 import Link from "next/link";
 import { ArrowRight, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/features/auth/server/auth.queries";
+import { redirect } from "next/navigation";
+import { getApplicantProfileData } from "../server/applicant.queries";
 
-export function ApplicantProfileStatus() {
-  // You can add logic here later: if (user.profileComplete) return null;
+export async function ApplicantProfileStatus() {
+  const user = await getCurrentUser();
+  if (!user) return redirect("/login");
+
+  const profileData = await getApplicantProfileData(user.id);
+
+  const isCompleted = !!(
+    profileData?.location &&
+    profileData?.biography &&
+    profileData?.experience &&
+    profileData?.resumeUrl
+  );
+
+  if (isCompleted) {
+    return null;
+  }
 
   return (
     <div className="relative overflow-hidden rounded-xl bg-red-500 p-6 text-white shadow-md">
-      {/* Decorative Circles (Optional visual flair) */}
       <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10" />
       <div className="absolute right-20 bottom-[-50px] h-24 w-24 rounded-full bg-white/10" />
 

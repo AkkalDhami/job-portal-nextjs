@@ -24,16 +24,13 @@ import {
 import { getEmployerApplications } from "@/features/server/employers.queries";
 
 export default async function EmployerApplicationsPage() {
-  // 1. Auth Check (Ensure it's an employer)
   const user = await getCurrentUser();
   if (!user || user.role !== "employer") return redirect("/login");
 
-  // 2. Fetch the applications
   const applications = await getEmployerApplications(user.id);
 
   return (
     <div className="max-w-7xl mx-auto py-8 space-y-8">
-      {/* Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">
           Received Applications
@@ -43,7 +40,6 @@ export default async function EmployerApplicationsPage() {
         </p>
       </div>
 
-      {/* Empty State */}
       {applications.length === 0 ? (
         <div className="text-center py-20 bg-gray-50 rounded-xl border border-dashed">
           <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -55,7 +51,6 @@ export default async function EmployerApplicationsPage() {
           </p>
         </div>
       ) : (
-        /* Applications Table */
         <div className="rounded-md border bg-white shadow-sm">
           <Table>
             <TableHeader>
@@ -75,7 +70,6 @@ export default async function EmployerApplicationsPage() {
                     key={application.id}
                     className="hover:bg-gray-50/50"
                   >
-                    {/* Candidate Info Column */}
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 relative rounded-full overflow-hidden bg-gray-100 flex-shrink-0 border">
@@ -99,7 +93,6 @@ export default async function EmployerApplicationsPage() {
                       </div>
                     </TableCell>
 
-                    {/* Job Info Column */}
                     <TableCell>
                       <div>
                         <p className="font-medium text-gray-900">{job.title}</p>
@@ -112,7 +105,6 @@ export default async function EmployerApplicationsPage() {
                       </div>
                     </TableCell>
 
-                    {/* Date Column */}
                     <TableCell>
                       <span className="text-sm text-gray-500 whitespace-nowrap">
                         {formatDistanceToNow(new Date(application.appliedAt), {
@@ -121,10 +113,8 @@ export default async function EmployerApplicationsPage() {
                       </span>
                     </TableCell>
 
-                    {/* Actions Column (Cover Letter & Resume) */}
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {/* Cover Letter Modal */}
                         {application.coverLetter && (
                           <Dialog>
                             <DialogTrigger asChild>
@@ -152,7 +142,6 @@ export default async function EmployerApplicationsPage() {
                           </Dialog>
                         )}
 
-                        {/* Resume Download Button */}
                         {resume?.fileUrl ? (
                           <Button
                             size="sm"

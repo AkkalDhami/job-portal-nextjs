@@ -56,19 +56,14 @@ export type ApplicantProfileType = NonNullable<
 export async function getAppliedJobsForApplicant(userId: number) {
   const applications = await db
     .select({
-      // We group the data by table to make it easy to read in the UI
       application: jobApplications,
       job: jobs,
       employer: employers,
     })
     .from(jobApplications)
-    // Join the jobs table where the application's jobId matches the job's id
     .innerJoin(jobs, eq(jobApplications.jobId, jobs.id))
-    // Join the employers table where the job's employerId matches the employer's id
     .leftJoin(employers, eq(jobs.employerId, employers.id))
-    // Filter by the logged-in applicant
     .where(eq(jobApplications.applicantId, userId))
-    // Sort by most recently applied
     .orderBy(desc(jobApplications.appliedAt));
 
   return applications;
