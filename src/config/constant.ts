@@ -5,6 +5,7 @@ import {
   Bookmark,
   Settings,
   Plus,
+  User,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -110,15 +111,23 @@ export const applicantNavItems: NavItem[] = [
  * Employer Dashboard Navigation Items
  * Based on folder structure: app/employer-dashboard/
  */
+// =====================================================
+// EMPLOYER DASHBOARD NAVIGATION
+// =====================================================
 export const employerNavItems: NavItem[] = [
   {
-    name: "Dashboard",
+    name: "Overview",
     href: "/employer-dashboard",
     icon: LayoutDashboard,
     exact: true, // Exact match for dashboard home
   },
   {
-    name: "Create Job",
+    name: "Applications",
+    href: "/employer-dashboard/applications",
+    icon: User,
+  },
+  {
+    name: "Post a Job",
     href: "/employer-dashboard/jobs/create",
     icon: Plus,
   },
@@ -126,7 +135,8 @@ export const employerNavItems: NavItem[] = [
     name: "My Jobs",
     href: "/employer-dashboard/jobs",
     icon: Briefcase,
-    // Note: /jobs exact match chahiye but /jobs/[jobId]/edit allow karna hai
+    // Note: If your active link logic highlights "My Jobs" when you are on "/jobs/create",
+    // you might need to add `exact: true` here depending on your navigation-utils setup!
   },
   {
     name: "Settings",
@@ -134,3 +144,11 @@ export const employerNavItems: NavItem[] = [
     icon: Settings,
   },
 ];
+
+// const navigationItems = [
+//   { name: "Overview", icon: LayoutDashboard, href: base + "/" },
+//   { name: "Applications", icon: User, href: base + "/applications" },
+//   { name: "Post a Job", icon: Plus, href: base + "/jobs/create" },
+//   { name: "My Jobs", icon: Briefcase, href: base + "/jobs" },
+//   { name: "Settings", icon: Settings, href: base + "/settings" },
+// ];
