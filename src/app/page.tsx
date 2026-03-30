@@ -30,7 +30,7 @@ export default async function HomePage() {
           <div className="container mx-auto max-w-7xl px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-6">
               Find a job that suits <br className="hidden md:block" />
-              your interest & skills.
+              your interest & skills🔥
             </h1>
             <p className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto">
               Discover thousands of job opportunities with top companies. Your
